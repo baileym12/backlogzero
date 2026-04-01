@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BacklogZero Prototype</title>
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9fafb;
+            --bg-tertiary: #f3f4f6;
+            --text-primary: #000000;
+            --text-secondary: #4b5563;
+            --border-color: #e5e7eb;
+            --accent-purple: #a855f7;
+            --accent-purple-light: #f3e8ff;
+            --black: #000000;
+            --white: #ffffff;
+            --success: #10b981;
+            --danger: #ef4444;
+            --font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-family); background-color: var(--bg-secondary); color: var(--text-primary); line-height: 1.5; }
+        a { text-decoration: none; color: inherit; cursor: pointer; }
+        ul { list-style: none; }
+        button { font-family: inherit; cursor: pointer; border: none; background: none; }
+
+        .hidden { display: none !important; }
+
+        h1, h2, h3, h4 { font-weight: 600; margin-bottom: 0.5rem; }
+        h1 { font-size: 2rem; letter-spacing: -0.02em; }
+        h2 { font-size: 1.5rem; }
+
+        .container { max-width: 1240px; margin: 0 auto; padding: 2rem; }
+
+        header {
+            background-color: var(--bg-primary);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(8px);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            gap: 1rem;
+        }
+
+        .logo { font-weight: 800; font-size: 1.25rem; letter-spacing: -0.5px; }
+        .nav-links { display: flex; gap: 1.1rem; align-items: center; font-size: 0.9rem; font-weight: 500; flex-wrap: wrap; }
+        .nav-links a:hover { color: var(--accent-purple); }
+
+        .btn-signup {
+            border: 1px solid var(--black);
+            padding: 0.45rem 1rem;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+        .btn-signup:hover { background-color: var(--black); color: var(--white); }
+
+        .profile-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.55rem;
+            padding: 0.35rem 0.55rem;
+            border: 1px solid var(--border-color);
+            border-radius: 999px;
+            background: var(--white);
+            transition: all 0.2s;
+        }
+
+        .profile-chip:hover { border-color: var(--black); }
+
+        .profile-avatar {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #111, #4b5563);
+            color: #fff;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.74rem;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+        }
+
+        .profile-meta {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.05;
+        }
+
+        .profile-name { font-size: 0.76rem; font-weight: 700; }
+        .profile-level { font-size: 0.68rem; color: var(--text-secondary); }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            font-weight: 500;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .btn-primary { background-color: var(--black); color: var(--white); border: 1px solid var(--black); }
+        .btn-primary:hover { opacity: 0.85; }
+        .btn-outline { background-color: var(--white); color: var(--text-primary); border: 1px solid var(--border-color); }
+        .btn-outline:hover { border-color: var(--black); }
+        .btn-pill { border-radius: 999px; padding: 0.55rem 1.1rem; }
+
+        .toggle-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            background: var(--white);
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            transition: all 0.2s;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .toggle-btn:hover { border-color: var(--black); color: var(--black); }
+        .toggle-btn.active {
+            background-color: var(--accent-purple-light);
+            color: var(--accent-purple);
+            border-color: var(--accent-purple);
+            font-weight: 600;
+        }
+
+        .slider-container { margin: 1.5rem 0; }
+        .slider-label { display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem; font-weight: 500; }
+        input[type="range"] { width: 100%; margin-bottom: 0.5rem; accent-color: var(--black); }
+
+        .grid { display: grid; gap: 1.5rem; }
+        .grid-cols-4 { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+        .grid-cols-3 { grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); }
+
+        .view-header { margin-bottom: 1.25rem; display: flex; justify-content: space-between; align-items: flex-end; gap: 1rem; flex-wrap: wrap; }
+        .view-header p { color: var(--text-secondary); }
+
+        .card {
+            background-color: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover { transform: translateY(-4px); box-shadow: 0 12px 20px -8px rgba(0, 0, 0, 0.25); }
+
+        .card-img {
+            height: 150px;
+            background-color: #111;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            padding: 0.8rem;
+        }
+
+        .card-img::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.15));
+        }
+
+        .card-img span {
+            position: relative;
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.45);
+        }
+
+        .card-content { padding: 1rem; flex-grow: 1; display: flex; flex-direction: column; }
+        .card-title { font-size: 1.05rem; margin-bottom: 0.5rem; line-height: 1.3; }
+        .card-meta { font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.9rem; display: flex; justify-content: space-between; }
+        .tags-container { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: auto; }
+        .tag { font-size: 0.7rem; padding: 0.2rem 0.6rem; border-radius: 12px; background-color: var(--bg-secondary); border: 1px solid var(--border-color); }
+        .tag.purple { background-color: var(--accent-purple-light); color: var(--accent-purple); border-color: var(--accent-purple); }
+
+        .filter-panel {
+            background-color: var(--bg-primary);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-group { margin-bottom: 1rem; }
+        .filter-group:last-child { margin-bottom: 0; }
+        .filter-title { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-secondary); }
+
+        .filter-actions { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.8rem; }
+        .filter-actions .right { display: flex; gap: 0.8rem; }
+
+        .summary-strip {
+            background: linear-gradient(120deg, #111 0%, #1f2937 70%, #111 100%);
+            color: #fff;
+            padding: 1.1rem 1.2rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .summary-stat { font-size: 0.9rem; opacity: 0.9; }
+        .summary-value { font-size: 1.4rem; font-weight: 700; }
+
+        .home-hero {
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 2rem;
+            background: linear-gradient(135deg, #111 0%, #1f2937 55%, #3b0764 100%);
+            color: #fff;
+            margin-bottom: 1.2rem;
+        }
+
+        .home-hero h1 { font-size: 2.2rem; margin-bottom: 0.4rem; }
+        .home-hero p { max-width: 650px; opacity: 0.92; }
+
+        .home-hero-actions {
+            display: flex;
+            gap: 0.7rem;
+            margin-top: 1.1rem;
+            flex-wrap: wrap;
+        }
+
+        .home-kpis {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 0.8rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .home-kpi {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 0.9rem;
+        }
+
+        .home-kpi-label { font-size: 0.78rem; color: var(--text-secondary); }
+        .home-kpi-value { font-size: 1.3rem; font-weight: 700; }
+
+        .wizard-container {
+            max-width: 660px;
+            margin: 2.8rem auto;
+            text-align: center;
+            background: var(--bg-primary);
+            padding: 2.2rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+
+        .wizard-title { margin-bottom: 1rem; }
+        .wizard-options { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem; }
+
+        .wizard-btn {
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--white);
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .wizard-btn:hover { border-color: var(--black); }
+        .wizard-btn.active { background: var(--accent-purple-light); border-color: var(--accent-purple); color: var(--accent-purple); }
+
+        .result-card {
+            display: flex;
+            gap: 1rem;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            text-align: left;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .result-img {
+            width: 180px;
+            height: 100px;
+            border-radius: 4px;
+            background-size: cover;
+            background-position: center;
+            flex-shrink: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result-img::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.5), transparent);
+        }
+
+        .result-info { flex: 1; min-width: 200px; }
+        .result-reason { font-size: 0.82rem; color: var(--accent-purple); font-weight: 600; margin-bottom: 0.3rem; }
+        .progress-bar-bg { width: 100%; height: 8px; background: var(--border-color); border-radius: 4px; margin: 0.4rem 0; overflow: hidden; }
+        .progress-bar-fill { height: 100%; background: var(--accent-purple); width: 0%; }
+
+        .detail-banner {
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            border-radius: 10px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .detail-banner::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.35));
+        }
+
+        .detail-banner h1,
+        .detail-banner p {
+            position: relative;
+        }
+
+        .detail-banner h1 { font-size: 2.8rem; }
+
+        .detail-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; }
+
+        .detail-section {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .stat-row { display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid var(--border-color); }
+        .stat-row:last-child { border-bottom: none; }
+        .stat-label { color: var(--text-secondary); }
+        .stat-value { font-weight: 600; }
+        .stars { color: var(--accent-purple); font-size: 1.2rem; }
+
+        .section-shell {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1.3rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .community-grid {
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: 1.5fr 1fr;
+        }
+
+        .post {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.8rem;
+            background: var(--bg-primary);
+        }
+
+        .post h4 { margin-bottom: 0.3rem; }
+        .post-meta { color: var(--text-secondary); font-size: 0.82rem; margin-bottom: 0.4rem; }
+        .pill {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 999px;
+            border: 1px solid var(--border-color);
+            font-size: 0.75rem;
+            margin-right: 0.35rem;
+            margin-bottom: 0.3rem;
+            color: var(--text-secondary);
+        }
+
+        .import-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .import-tile {
+            aspect-ratio: 1;
+            background: var(--black);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .import-tile:hover { transform: scale(1.03); background: var(--accent-purple); }
+
+        footer {
+            margin-top: 2.5rem;
+            border-top: 1px solid var(--border-color);
+            padding: 1.5rem 2rem;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            text-align: center;
+        }
+
+        @media (max-width: 960px) {
+            .container { padding: 1.1rem; }
+            .nav-container { padding: 0.9rem 1.1rem; }
+            .detail-grid { grid-template-columns: 1fr; }
+            .community-grid { grid-template-columns: 1fr; }
+            .import-grid { grid-template-columns: repeat(2, 1fr); }
+            .wizard-options { grid-template-columns: 1fr; }
+            .home-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+
+        @media (max-width: 640px) {
+            h1 { font-size: 1.6rem; }
+            .result-img { width: 100%; }
+            .filter-actions .right { width: 100%; }
+            .filter-actions .right button { flex: 1; }
+            .home-kpis { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <div class="logo"><a href="#" onclick="navTo('home')">BACKLOGZERO</a></div>
+            <nav class="nav-links">
+                <a href="#" onclick="navTo('home')">Home</a>
+                <a href="#" onclick="navTo('library')">Backlog</a>
+                <a href="#" onclick="navTo('discover')">Discover</a>
+                <a href="#" onclick="navTo('quickpick-1')">Quick Pick</a>
+                <a href="#" onclick="navTo('community')">Community</a>
+                <a href="#" onclick="navTo('import')">Import</a>
+                <a href="#" onclick="navTo('profile')" class="profile-chip" aria-label="Open user profile">
+                    <span class="profile-avatar">BZ</span>
+                    <span class="profile-meta">
+                        <span class="profile-name">User Zero</span>
+                        <span class="profile-level">Level 18</span>
+                    </span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <main id="app-container" class="container">
+
+        <section id="view-home" class="view">
+            <div class="home-hero">
+                <h1>Clear Your Backlog, One Great Pick At A Time</h1>
+                <p>BacklogZero keeps your library organized, recommends what to play next, and connects you with community challenges so unfinished games stop collecting dust.</p>
+                <div class="home-hero-actions">
+                    <button class="btn btn-primary" onclick="navTo('quickpick-1')">Start Quick Pick</button>
+                    <button class="btn btn-outline" style="background: rgba(255,255,255,0.9);" onclick="navTo('library')">Open Backlog</button>
+                </div>
+            </div>
+
+            <div class="home-kpis">
+                <div class="home-kpi">
+                    <div class="home-kpi-label">Library Size</div>
+                    <div id="home-kpi-library" class="home-kpi-value">0 games</div>
+                </div>
+                <div class="home-kpi">
+                    <div class="home-kpi-label">In Progress</div>
+                    <div id="home-kpi-progress" class="home-kpi-value">0 titles</div>
+                </div>
+                <div class="home-kpi">
+                    <div class="home-kpi-label">Ready To Finish Soon</div>
+                    <div id="home-kpi-ready" class="home-kpi-value">0 games</div>
+                </div>
+                <div class="home-kpi">
+                    <div class="home-kpi-label">Community Events This Week</div>
+                    <div class="home-kpi-value">3 events</div>
+                </div>
+            </div>
+
+            <div class="section-shell">
+                <div class="view-header" style="margin-bottom: 0.7rem;">
+                    <div>
+                        <h2>Continue Playing</h2>
+                        <p>Jump back into games where you already have momentum.</p>
+                    </div>
+                </div>
+                <div id="home-continue-grid" class="grid grid-cols-3"></div>
+            </div>
+
+            <div class="section-shell">
+                <div class="view-header" style="margin-bottom: 0.7rem;">
+                    <div>
+                        <h2>Community Favorites</h2>
+                        <p>Top-rated picks trending with your circle this week.</p>
+                    </div>
+                    <button class="btn btn-outline" onclick="navTo('community')">Visit Community</button>
+                </div>
+                <div id="home-favorites-grid" class="grid grid-cols-3"></div>
+            </div>
+        </section>
+
+        <section id="view-library" class="view hidden">
+            <div class="view-header">
+                <div>
+                    <h1>Your Backlog</h1>
+                    <p>Filter and discover what to play next.</p>
+                </div>
+                <div style="display: flex; gap: 0.6rem;">
+                    <button class="btn btn-outline btn-pill" onclick="toggleFilterPanel()">Filters</button>
+                    <button class="btn btn-primary btn-pill" onclick="navTo('quickpick-1')">Quick Pick</button>
+                </div>
+            </div>
+
+            <div class="summary-strip">
+                <div>
+                    <div class="summary-stat">Total Games</div>
+                    <div class="summary-value" id="summary-total">0</div>
+                </div>
+                <div>
+                    <div class="summary-stat">In Progress</div>
+                    <div class="summary-value" id="summary-progress">0</div>
+                </div>
+                <div>
+                    <div class="summary-stat">Average Time To Beat</div>
+                    <div class="summary-value" id="summary-avg">0h</div>
+                </div>
+            </div>
+
+            <div id="filter-panel" class="filter-panel hidden">
+                <h3>Filter Selection</h3>
+
+                <div class="slider-container">
+                    <div class="slider-label">
+                        <span>Game Length</span>
+                        <span id="time-display">Any length</span>
+                    </div>
+                    <input type="range" id="time-filter" min="1" max="220" value="220" oninput="updateTimeFilter()">
+                </div>
+
+                <div class="filter-group">
+                    <div class="filter-title">Genre</div>
+                    <div id="genre-filters">
+                        <button class="toggle-btn" data-category="genre" data-value="Cozy" onclick="toggleDraftFilter(this)">Cozy</button>
+                        <button class="toggle-btn" data-category="genre" data-value="Fantasy" onclick="toggleDraftFilter(this)">Fantasy</button>
+                        <button class="toggle-btn" data-category="genre" data-value="Story-Driven" onclick="toggleDraftFilter(this)">Story-Driven</button>
+                        <button class="toggle-btn" data-category="genre" data-value="Action-Packed" onclick="toggleDraftFilter(this)">Action</button>
+                        <button class="toggle-btn" data-category="genre" data-value="RPG" onclick="toggleDraftFilter(this)">RPG</button>
+                        <button class="toggle-btn" data-category="genre" data-value="Competitive" onclick="toggleDraftFilter(this)">Competitive</button>
+                        <button class="toggle-btn" data-category="genre" data-value="Shooter" onclick="toggleDraftFilter(this)">Shooter</button>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <div class="filter-title">Player Count</div>
+                    <div id="player-filters">
+                        <button class="toggle-btn" data-category="players" data-value="1" onclick="toggleDraftFilter(this)">1 Player</button>
+                        <button class="toggle-btn" data-category="players" data-value="2-4" onclick="toggleDraftFilter(this)">2 - 4</button>
+                        <button class="toggle-btn" data-category="players" data-value="4+" onclick="toggleDraftFilter(this)">4+</button>
+                        <button class="toggle-btn" data-category="players" data-value="Multiplayer" onclick="toggleDraftFilter(this)">Online Multiplayer</button>
+                    </div>
+                </div>
+
+                <div class="filter-actions">
+                    <span style="font-size: 0.85rem; color: var(--text-secondary);">Filters are applied only when you press "Apply".</span>
+                    <div class="right">
+                        <button class="btn btn-outline" onclick="resetDraftFilters()">Reset</button>
+                        <button class="btn btn-primary" onclick="applyFilters()">Apply Filters</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="library-grid" class="grid grid-cols-4"></div>
+        </section>
+
+        <section id="view-discover" class="view hidden">
+            <div class="view-header">
+                <div>
+                    <h1>Discover</h1>
+                    <p>Fresh picks from your backlog profile and current community trends.</p>
+                </div>
+            </div>
+
+            <div class="section-shell">
+                <h3 style="margin-bottom: 0.9rem;">Trending In Your Circle</h3>
+                <div id="discover-trending" class="grid grid-cols-3"></div>
+            </div>
+
+            <div class="section-shell">
+                <h3 style="margin-bottom: 0.9rem;">Great For Short Sessions</h3>
+                <div id="discover-short" class="grid grid-cols-3"></div>
+            </div>
+        </section>
+
+        <section id="view-quickpick-1" class="view hidden">
+            <div class="wizard-container">
+                <h2 class="wizard-title">Quick Pick</h2>
+                <p style="margin-bottom: 2rem; color: var(--text-secondary);">Can't decide what to play? Let us help you choose in seconds.</p>
+
+                <h3 style="margin-bottom: 1rem;">How much time do you have?</h3>
+                <div class="wizard-options" id="qp-time-options">
+                    <button class="wizard-btn" onclick="selectQP('time', 0.5, this)">30 Minutes</button>
+                    <button class="wizard-btn" onclick="selectQP('time', 1, this)">1 Hour</button>
+                    <button class="wizard-btn" onclick="selectQP('time', 3, this)">2-3 Hours</button>
+                    <button class="wizard-btn" onclick="selectQP('time', 8, this)">All Night</button>
+                </div>
+
+                <button class="btn btn-primary" style="width: 100%;" onclick="nextQP(2)">Continue</button>
+            </div>
+        </section>
+
+        <section id="view-quickpick-2" class="view hidden">
+            <div class="wizard-container">
+                <h3 style="margin-bottom: 1rem;">What's your Mood?</h3>
+                <div class="wizard-options" id="qp-mood-options">
+                    <button class="wizard-btn" onclick="selectQP('mood', 'Relaxing', this)">Relaxing</button>
+                    <button class="wizard-btn" onclick="selectQP('mood', 'Challenging', this)">Challenging</button>
+                    <button class="wizard-btn" onclick="selectQP('mood', 'Story-Driven', this)">Story-Driven</button>
+                    <button class="wizard-btn" onclick="selectQP('mood', 'Action-Packed', this)">Action-Packed</button>
+                    <button class="wizard-btn" onclick="selectQP('mood', 'Creative', this)">Creative</button>
+                    <button class="wizard-btn" onclick="selectQP('mood', 'Competitive', this)">Competitive</button>
+                </div>
+
+                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                    <button class="btn btn-outline" style="flex: 1;" onclick="navTo('quickpick-1')">Back</button>
+                    <button class="btn btn-primary" style="flex: 2;" onclick="nextQP(3)">Continue</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-quickpick-3" class="view hidden">
+            <div class="wizard-container">
+                <h3 style="margin-bottom: 1rem;">Solo or Multiplayer?</h3>
+                <div class="wizard-options" id="qp-type-options">
+                    <button class="wizard-btn" onclick="selectQP('type', 'Solo', this)">Solo</button>
+                    <button class="wizard-btn" onclick="selectQP('type', 'Multiplayer', this)">Multiplayer</button>
+                </div>
+
+                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                    <button class="btn btn-outline" style="flex: 1;" onclick="navTo('quickpick-2')">Back</button>
+                    <button class="btn btn-primary" style="flex: 2;" onclick="generateQuickPicks()">Find My Game</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-quickpick-results" class="view hidden">
+            <div class="view-header">
+                <div>
+                    <h1>Your Personalized Picks</h1>
+                    <p id="qp-subtitle">Based on your selections.</p>
+                </div>
+                <button class="btn btn-outline" onclick="navTo('quickpick-1')">Generate New Picks</button>
+            </div>
+
+            <div id="qp-results-container" style="max-width: 900px;"></div>
+        </section>
+
+        <section id="view-community" class="view hidden">
+            <div class="view-header">
+                <div>
+                    <h1>Community</h1>
+                    <p>Share progress, discover squads, and track weekly challenges.</p>
+                </div>
+                <button class="btn btn-primary" onclick="alert('Posting is coming soon in this prototype!')">Create Post</button>
+            </div>
+
+            <div class="community-grid">
+                <div>
+                    <div class="section-shell">
+                        <h3>Hot Discussions</h3>
+                        <div class="post">
+                            <h4>Best short game to finish this weekend?</h4>
+                            <div class="post-meta">by Rhea • 37 replies • 2h ago</div>
+                            <p style="font-size: 0.9rem;">Looking for a 6-10 hour game with a strong story. My vote is still on Resident Evil 4.</p>
+                            <div style="margin-top: 0.5rem;">
+                                <span class="pill">Story-Driven</span>
+                                <span class="pill">Short Sessions</span>
+                            </div>
+                        </div>
+                        <div class="post">
+                            <h4>Helldivers squad up thread</h4>
+                            <div class="post-meta">by BoltUnit • 14 replies • 4h ago</div>
+                            <p style="font-size: 0.9rem;">Drop your timezone and platform, I am organizing squads for tonight's operation.</p>
+                            <div style="margin-top: 0.5rem;">
+                                <span class="pill">Multiplayer</span>
+                                <span class="pill">LFG</span>
+                            </div>
+                        </div>
+                        <div class="post">
+                            <h4>Is 2026 finally my Elden Ring year?</h4>
+                            <div class="post-meta">by PixelNomad • 29 replies • 6h ago</div>
+                            <p style="font-size: 0.9rem;">Backlog guilt is real. Need a route recommendation for a first build.</p>
+                            <div style="margin-top: 0.5rem;">
+                                <span class="pill">RPG</span>
+                                <span class="pill">Backlog</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="section-shell">
+                        <h3>Weekly Challenge</h3>
+                        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 0.8rem;">Complete one game that is under 12 hours.</p>
+                        <div class="progress-bar-bg" style="height: 10px;">
+                            <div class="progress-bar-fill" style="width: 62%; background: var(--success);"></div>
+                        </div>
+                        <p style="font-size: 0.82rem; margin-top: 0.5rem; color: var(--text-secondary);">1,241 / 2,000 members complete</p>
+                    </div>
+
+                    <div class="section-shell">
+                        <h3>Upcoming Events</h3>
+                        <div class="post" style="margin-bottom: 0.6rem;">
+                            <h4 style="font-size: 1rem;">Friday Co-op Night</h4>
+                            <div class="post-meta">Apr 4 • 8:00 PM</div>
+                        </div>
+                        <div class="post" style="margin-bottom: 0.6rem;">
+                            <h4 style="font-size: 1rem;">Spoiler-Free Story Club: BG3</h4>
+                            <div class="post-meta">Apr 7 • 7:30 PM</div>
+                        </div>
+                        <div class="post" style="margin-bottom: 0;">
+                            <h4 style="font-size: 1rem;">Sunday Backlog Sprint</h4>
+                            <div class="post-meta">Apr 9 • 6:00 PM</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-profile" class="view hidden">
+            <div class="view-header">
+                <div>
+                    <h1>Profile</h1>
+                    <p>Mock user profile preview for BacklogZero.</p>
+                </div>
+            </div>
+
+            <div class="community-grid">
+                <div>
+                    <div class="section-shell">
+                        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                            <div class="profile-avatar" style="width: 56px; height: 56px; font-size: 1rem;">BZ</div>
+                            <div>
+                                <h3 style="margin-bottom: 0.1rem;">User Zero</h3>
+                                <p style="font-size: 0.88rem; color: var(--text-secondary);">@userzero • Joined Jan 2026</p>
+                            </div>
+                        </div>
+                        <p style="font-size: 0.92rem; color: var(--text-secondary);">RPG fan, weekend co-op organizer, and backlog decluttering enthusiast.</p>
+                    </div>
+
+                    <div class="section-shell">
+                        <h3>Current Focus</h3>
+                        <div class="post">
+                            <h4>Elden Ring</h4>
+                            <div class="post-meta">Target: Beat first legacy dungeon this week</div>
+                            <div class="progress-bar-bg">
+                                <div class="progress-bar-fill" style="width: 35%;"></div>
+                            </div>
+                            <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.35rem;">35% toward weekly goal</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="section-shell">
+                        <h3>Stats</h3>
+                        <div class="stat-row">
+                            <span class="stat-label">Games Completed</span>
+                            <span class="stat-value">27</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Backlog Remaining</span>
+                            <span class="stat-value">19</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Current Streak</span>
+                            <span class="stat-value">14 days</span>
+                        </div>
+                    </div>
+                    <div class="section-shell">
+                        <h3>Favorite Genres</h3>
+                        <span class="pill">RPG</span>
+                        <span class="pill">Story-Driven</span>
+                        <span class="pill">Action-Packed</span>
+                        <span class="pill">Co-op</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-game-detail" class="view hidden"></section>
+
+        <section id="view-import" class="view hidden">
+            <div style="text-align: center; max-width: 860px; margin: 0 auto;">
+                <h1>Choose Your Platform</h1>
+                <p style="color: var(--text-secondary);">Start importing your library and keep progress synchronized in one place.</p>
+
+                <div class="import-grid">
+                    <div class="import-tile">Steam</div>
+                    <div class="import-tile">Epic</div>
+                    <div class="import-tile">PlayStation</div>
+                    <div class="import-tile">Xbox</div>
+                    <div class="import-tile">Switch</div>
+                    <div class="import-tile">Battle.net</div>
+                    <div class="import-tile">GOG</div>
+                    <div class="import-tile">Manual CSV</div>
+                </div>
+
+                <button class="btn btn-outline" style="margin-top: 2rem;" onclick="navTo('library')">Back to Library</button>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        BacklogZero Prototype • One place for backlog tracking, discovery, and community play.
+    </footer>
+
+    <script>
+        const games = [
+            {
+                id: 1,
+                title: "Elden Ring",
+                genre: ["RPG", "Action-Packed", "Challenging", "Fantasy"],
+                timeToBeat: 132,
+                players: "1",
+                type: "Solo",
+                progress: 0,
+                communityScore: 4.8,
+                reason: "Because you like fantasy RPG worlds.",
+                image: "https://cdn.akamai.steamstatic.com/steam/apps/1245620/header.jpg"
+            },
+            {
+                id: 2,
+                title: "Hollow Knight",
+                genre: ["Action-Packed", "Challenging", "Story-Driven"],
+                timeToBeat: 27,
+                players: "1",
+                type: "Solo",
+                progress: 15,
+                communityScore: 4.7,
+                reason: "Great fit for challenge-focused evenings.",
+                image: "https://cdn.akamai.steamstatic.com/steam/apps/367520/header.jpg"
+            },
+            {
+                id: 3,
+                title: "Apex Legends",
+                genre: ["Shooter", "Competitive", "Action-Packed"],
+                timeToBeat: 1000,
+                players: "4+",
+                type: "Multiplayer",
+                progress: 0,
+                communityScore: 4.3,
+                reason: "Matches your competitive mood.",
+                image: "https://cdn.akamai.steamstatic.com/steam/apps/1172470/header.jpg"
+            },
+            {
+                id: 4,
+                title: "Baldur's Gate 3",
+                genre: ["Story-Driven", "RPG", "Fantasy"],
+                timeToBeat: 68,
+                players: "2-4",
+                type: "Multiplayer",
+                progress: 0,
+                communityScore: 4.9,
+                reason: "Strong community recommendation this week.",
+                image: "https://cdn.akamai.steamstatic.com/steam/apps/1086940/header.jpg"
+            },
+            {
+                id: 5,
+                title: "Resident Evil 4",
+                genre: ["Story-Driven", "Challenging", "Action-Packed"],
+                timeToBeat: 16,
+                players: "1",
+                type: "Solo",
+                progress: 30,
+                communityScore: 4.6,
+                reason: "You already started and made solid progress.",
+                image: "https://cdn.akamai.steamstatic.com/steam/apps/2050650/header.jpg"
+            },
+            {
+                id: 6,
+                title: "Stardew Valley",
+                genre: ["Cozy", "Relaxing", "Creative"],
+                timeToBeat: 53,
+                players: "2-4",
+                type: "Multiplayer",
+                progress: 48,
+                communityScore: 4.8,
+                reason: "Perfect for winding down with steady progress.",
+                image: "https://cdn.akamai.steamstatic.com/steam/apps/413150/header.jpg"
+            },
+            {
+                id: 7,
+                title: "Helldivers 2",
+                genre: ["Shooter", "Action-Packed", "Competitive"],
+                timeToBeat: 75,
+                players: "4+",
+                type: "Multiplayer",
+                progress: 5,
+                communityScore: 4.4,
+                reason: "High-energy co-op if your friends are online.",
+                image: "https://cdn.akamai.steamstatic.com/steam/apps/553850/header.jpg"
+            },
+            {
+                id: 8,
+                title: "Cyberpunk 2077",
+                genre: ["Story-Driven", "RPG", "Action-Packed"],
+                timeToBeat: 50,
+                players: "1",
+                type: "Solo",
+                progress: 12,
+                communityScore: 4.5,
+                reason: "Great pick if you want immersive storytelling.",
+                image: "https://cdn.akamai.steamstatic.com/steam/apps/1091500/header.jpg"
+            },
+            {
+                id: 9,
+                title: "Hades",
+                genre: ["Action-Packed", "Challenging", "Story-Driven"],
+                timeToBeat: 23,
+                players: "1",
+                type: "Solo",
+                progress: 22,
+                communityScore: 4.8,
+                reason: "Fits your short-session gameplay style.",
+                image: "https://cdn.akamai.steamstatic.com/steam/apps/1145360/header.jpg"
+            },
+            {
+                id: 10,
+                title: "Red Dead Redemption 2",
+                genre: ["Story-Driven", "RPG", "Relaxing"],
+                timeToBeat: 50,
+                players: "1",
+                type: "Solo",
+                progress: 5,
+                communityScore: 4.9,
+                reason: "Highly rated epic when you have longer sessions.",
+                image: "https://cdn.akamai.steamstatic.com/steam/apps/1174180/header.jpg"
+            }
+        ];
+
+        let activeFilters = {
+            genre: [],
+            players: [],
+            maxTime: 220
+        };
+
+        let draftFilters = {
+            genre: [],
+            players: [],
+            maxTime: 220
+        };
+
+        let qpState = {
+            time: null,
+            mood: null,
+            type: null
+        };
+
+        function cloneFilters(filters) {
+            return {
+                genre: [...filters.genre],
+                players: [...filters.players],
+                maxTime: filters.maxTime
+            };
+        }
+
+        function navTo(viewId) {
+            document.querySelectorAll(".view").forEach(v => v.classList.add("hidden"));
+            document.getElementById(`view-${viewId}`).classList.remove("hidden");
+            window.scrollTo(0, 0);
+
+            if (viewId === "home") renderHome();
+            if (viewId === "library") renderLibrary();
+            if (viewId === "discover") renderDiscover();
+        }
+
+        function renderHome() {
+            const libraryCount = games.length;
+            const inProgress = games.filter(g => g.progress > 0 && g.progress < 100);
+            const readyToFinish = games.filter(g => g.progress >= 20 && g.progress < 100);
+
+            document.getElementById("home-kpi-library").innerText = `${libraryCount} games`;
+            document.getElementById("home-kpi-progress").innerText = `${inProgress.length} titles`;
+            document.getElementById("home-kpi-ready").innerText = `${readyToFinish.length} games`;
+
+            const continueGrid = document.getElementById("home-continue-grid");
+            const favoritesGrid = document.getElementById("home-favorites-grid");
+            continueGrid.innerHTML = "";
+            favoritesGrid.innerHTML = "";
+
+            inProgress
+                .sort((a, b) => b.progress - a.progress)
+                .slice(0, 3)
+                .forEach(game => continueGrid.appendChild(createCard(game)));
+
+            [...games]
+                .sort((a, b) => b.communityScore - a.communityScore)
+                .slice(0, 3)
+                .forEach(game => favoritesGrid.appendChild(createCard(game)));
+        }
+
+        function createCard(game) {
+            const card = document.createElement("div");
+            card.className = "card";
+            card.onclick = () => showGameDetail(game.id);
+            card.innerHTML = `
+                <div class="card-img" style="background-image: url('${game.image}');">
+                    <span>${game.title}</span>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">${game.title}</h3>
+                    <div class="card-meta">
+                        <span>${game.genre[0]}</span>
+                        <span>${game.timeToBeat} hrs</span>
+                    </div>
+                    <div class="tags-container">
+                        <span class="tag">${game.type}</span>
+                        <span class="tag purple">${game.players} players</span>
+                        <span class="tag">${game.communityScore.toFixed(1)} score</span>
+                    </div>
+                </div>
+            `;
+            return card;
+        }
+
+        function updateSummary(gamesToRender) {
+            const total = gamesToRender.length;
+            const inProgress = gamesToRender.filter(g => g.progress > 0 && g.progress < 100).length;
+            const avg = total ? Math.round(gamesToRender.reduce((sum, game) => sum + game.timeToBeat, 0) / total) : 0;
+
+            document.getElementById("summary-total").innerText = total;
+            document.getElementById("summary-progress").innerText = inProgress;
+            document.getElementById("summary-avg").innerText = `${avg}h`;
+        }
+
+        function renderLibrary() {
+            const grid = document.getElementById("library-grid");
+            grid.innerHTML = "";
+
+            const filteredGames = games.filter(game => {
+                if (game.timeToBeat > activeFilters.maxTime) return false;
+
+                if (activeFilters.genre.length > 0) {
+                    const hasGenre = activeFilters.genre.some(g => game.genre.includes(g));
+                    if (!hasGenre) return false;
+                }
+
+                if (activeFilters.players.length > 0) {
+                    const hasPlayerMatch = activeFilters.players.includes(game.players) || activeFilters.players.includes(game.type);
+                    if (!hasPlayerMatch) return false;
+                }
+
+                return true;
+            });
+
+            updateSummary(filteredGames);
+
+            if (filteredGames.length === 0) {
+                grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 3rem; color: #6b7280;">No games match your current filters.</p>';
+                return;
+            }
+
+            filteredGames.forEach(game => grid.appendChild(createCard(game)));
+        }
+
+        function renderDiscover() {
+            const trending = [...games].sort((a, b) => b.communityScore - a.communityScore).slice(0, 3);
+            const shortSessions = games.filter(g => g.timeToBeat <= 25).slice(0, 3);
+
+            const trendingEl = document.getElementById("discover-trending");
+            const shortEl = document.getElementById("discover-short");
+            trendingEl.innerHTML = "";
+            shortEl.innerHTML = "";
+
+            trending.forEach(game => trendingEl.appendChild(createCard(game)));
+            shortSessions.forEach(game => shortEl.appendChild(createCard(game)));
+        }
+
+        function toggleFilterPanel() {
+            document.getElementById("filter-panel").classList.toggle("hidden");
+        }
+
+        function updateTimeFilter() {
+            const val = parseInt(document.getElementById("time-filter").value, 10);
+            draftFilters.maxTime = val;
+            document.getElementById("time-display").innerText = val === 220 ? "Any length" : `Under ${val} Hours`;
+        }
+
+        function toggleDraftFilter(btn) {
+            const category = btn.dataset.category;
+            const value = btn.dataset.value;
+            btn.classList.toggle("active");
+
+            if (btn.classList.contains("active")) {
+                if (!draftFilters[category].includes(value)) draftFilters[category].push(value);
+            } else {
+                draftFilters[category] = draftFilters[category].filter(v => v !== value);
+            }
+        }
+
+        function syncFilterUIFromDraft() {
+            document.querySelectorAll(".toggle-btn").forEach(btn => {
+                const category = btn.dataset.category;
+                const value = btn.dataset.value;
+                const isActive = draftFilters[category].includes(value);
+                btn.classList.toggle("active", isActive);
+            });
+
+            document.getElementById("time-filter").value = draftFilters.maxTime;
+            document.getElementById("time-display").innerText = draftFilters.maxTime === 220 ? "Any length" : `Under ${draftFilters.maxTime} Hours`;
+        }
+
+        function applyFilters() {
+            activeFilters = cloneFilters(draftFilters);
+            renderLibrary();
+            document.getElementById("filter-panel").classList.add("hidden");
+        }
+
+        function resetDraftFilters() {
+            draftFilters = {
+                genre: [],
+                players: [],
+                maxTime: 220
+            };
+            syncFilterUIFromDraft();
+        }
+
+        function selectQP(category, value, btnElem) {
+            qpState[category] = value;
+            const parent = btnElem.parentElement;
+            parent.querySelectorAll(".wizard-btn").forEach(b => b.classList.remove("active"));
+            btnElem.classList.add("active");
+        }
+
+        function nextQP(step) {
+            navTo(`quickpick-${step}`);
+        }
+
+        function generateQuickPicks() {
+            navTo("quickpick-results");
+
+            document.getElementById("qp-subtitle").innerText = `Based on: ${qpState.time || "?"} hour window • ${qpState.mood || "Any"} mood • ${qpState.type || "Solo"} play`;
+
+            let recommendations = games.filter(game => {
+                if (qpState.type === "Solo" && game.type !== "Solo") return false;
+                if (qpState.type === "Multiplayer" && game.type !== "Multiplayer") return false;
+                if (qpState.time && game.timeToBeat > qpState.time * 30) return false;
+                if (qpState.mood && !game.genre.includes(qpState.mood)) return false;
+                return true;
+            });
+
+            if (recommendations.length < 3) {
+                const filler = games.filter(g => !recommendations.includes(g));
+                recommendations = recommendations.concat(filler.slice(0, 3 - recommendations.length));
+            }
+
+            recommendations = recommendations.slice(0, 3);
+
+            const container = document.getElementById("qp-results-container");
+            container.innerHTML = "";
+
+            recommendations.forEach(game => {
+                const el = document.createElement("div");
+                el.className = "result-card";
+                el.innerHTML = `
+                    <div class="result-img" style="background-image: url('${game.image}');"></div>
+                    <div class="result-info">
+                        <div class="result-reason">${game.reason}</div>
+                        <h3>${game.title}</h3>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem;">${game.timeToBeat} Hours Main Story • ${game.type}</p>
+                        ${game.progress > 0 ? `
+                            <div class="progress-bar-bg">
+                                <div class="progress-bar-fill" style="width: ${game.progress}%"></div>
+                            </div>
+                            <p style="font-size: 0.75rem; text-align: right;">${game.progress}% Complete</p>
+                        ` : ""}
+                    </div>
+                    <button class="btn btn-primary" onclick="showGameDetail(${game.id})">View Details</button>
+                `;
+                container.appendChild(el);
+            });
+        }
+
+        function showGameDetail(gameId) {
+            const game = games.find(g => g.id === gameId);
+            if (!game) return;
+
+            const detailView = document.getElementById("view-game-detail");
+            detailView.innerHTML = `
+                <div class="detail-banner" style="background-image: url('${game.image}');">
+                    <h1>${game.title}</h1>
+                    <p>${game.genre.join(" | ")}</p>
+                </div>
+
+                <div class="detail-grid">
+                    <div>
+                        <div class="detail-section">
+                            <h2>Your Progress</h2>
+                            <div style="display: flex; gap: 2rem; margin-top: 1rem; flex-wrap: wrap;">
+                                <div style="flex: 1; min-width: 220px;">
+                                    <div class="stat-label">Completion</div>
+                                    <div class="stat-value" style="font-size: 2rem;">${game.progress}%</div>
+                                    <div class="progress-bar-bg" style="height: 12px;">
+                                        <div class="progress-bar-fill" style="width: ${game.progress}%"></div>
+                                    </div>
+                                </div>
+                                <div style="flex: 1; min-width: 220px;">
+                                    <div class="stat-label">Time Played</div>
+                                    <div class="stat-value" style="font-size: 1.5rem;">${Math.floor(game.timeToBeat * (game.progress / 100))} Hours</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="detail-section">
+                            <h2>Time To Beat</h2>
+                            <div class="stat-row">
+                                <span class="stat-label">Main Story</span>
+                                <span class="stat-value">${game.timeToBeat} Hours</span>
+                            </div>
+                            <div class="stat-row">
+                                <span class="stat-label">Main + Extras</span>
+                                <span class="stat-value">${Math.floor(game.timeToBeat * 1.45)} Hours</span>
+                            </div>
+                            <div class="stat-row">
+                                <span class="stat-label">Completionist</span>
+                                <span class="stat-value">${Math.floor(game.timeToBeat * 1.95)}+ Hours</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="detail-section">
+                            <h2>Community Reviews</h2>
+                            <div class="stars">★★★★☆</div>
+                            <p style="margin-top: 0.5rem; font-size: 0.9rem;">${game.communityScore.toFixed(1)} community score</p>
+
+                            <div style="margin-top: 1.2rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+                                <div style="margin-bottom: 1rem;">
+                                    <div class="stars" style="font-size: 0.9rem;">★★★★★</div>
+                                    <p style="font-size: 0.85rem; font-weight: 500;">"Great pacing and atmosphere. Easy to jump back into."</p>
+                                </div>
+                                <div>
+                                    <div class="stars" style="font-size: 0.9rem;">★★★★☆</div>
+                                    <p style="font-size: 0.85rem; font-weight: 500;">"Loved it overall, but some sections run long."</p>
+                                </div>
+                            </div>
+                            <button class="btn btn-outline" style="width: 100%; margin-top: 1.2rem;">View All Reviews</button>
+                        </div>
+
+                        <button class="btn btn-primary" style="width: 100%; padding: 1.1rem; font-size: 1rem; margin-top: 0.9rem;">Play Now</button>
+                    </div>
+                </div>
+
+                <button class="btn btn-outline" style="margin-top: 1.5rem;" onclick="navTo('library')">Back to Library</button>
+            `;
+
+            navTo("game-detail");
+        }
+
+        syncFilterUIFromDraft();
+        renderHome();
+        renderLibrary();
+        renderDiscover();
+        navTo("home");
+    </script>
+</body>
+</html>
