@@ -18,11 +18,24 @@
             --white: #ffffff;
             --success: #10b981;
             --danger: #ef4444;
+            --warning: #f59e0b;
             --font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
 
+        body.dark-mode {
+            --bg-primary: #111827;
+            --bg-secondary: #030712;
+            --bg-tertiary: #1f2937;
+            --text-primary: #f9fafb;
+            --text-secondary: #cbd5e1;
+            --border-color: #374151;
+            --black: #f9fafb;
+            --white: #111827;
+            --accent-purple-light: rgba(168, 85, 247, 0.16);
+        }
+
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: var(--font-family); background-color: var(--bg-secondary); color: var(--text-primary); line-height: 1.5; overflow-x: hidden; }
+        body { font-family: var(--font-family); background-color: var(--bg-secondary); color: var(--text-primary); line-height: 1.5; overflow-x: hidden; transition: background-color 0.2s, color 0.2s; }
         a { text-decoration: none; color: inherit; cursor: pointer; }
         ul { list-style: none; }
         button { font-family: inherit; cursor: pointer; border: none; background: none; }
@@ -57,6 +70,30 @@
         .logo { font-weight: 800; font-size: 1.25rem; letter-spacing: -0.5px; }
         .nav-links { display: flex; gap: 1.1rem; align-items: center; font-size: 0.9rem; font-weight: 500; flex-wrap: wrap; }
         .nav-links a:hover { color: var(--accent-purple); }
+        .nav-links > a:not(.profile-chip):not(.nav-control) {
+            padding: 0.35rem 0.5rem;
+            border-radius: 6px;
+            border: 1px solid transparent;
+        }
+        .nav-links > a:not(.profile-chip):not(.nav-control):hover {
+            background: var(--bg-secondary);
+            border-color: var(--border-color);
+        }
+
+        .nav-control {
+            padding: 0.35rem 0.65rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-primary);
+            font-size: 0.77rem;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+        }
+
+        .nav-control:hover {
+            border-color: var(--black);
+            color: var(--text-primary);
+        }
 
         .btn-signup {
             border: 1px solid var(--black);
@@ -140,8 +177,54 @@
         .slider-label { display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem; font-weight: 500; }
         input[type="range"] { width: 100%; margin-bottom: 0.5rem; accent-color: var(--black); }
 
+        .range-stack {
+            position: relative;
+            height: 38px;
+            display: grid;
+            align-items: center;
+        }
+
+        .range-stack input[type="range"] {
+            position: absolute;
+            width: 100%;
+            margin: 0;
+            pointer-events: none;
+            background: transparent;
+        }
+
+        .range-stack input[type="range"]::-webkit-slider-thumb {
+            pointer-events: auto;
+        }
+
+        .range-stack input[type="range"]::-moz-range-thumb {
+            pointer-events: auto;
+        }
+
+        .search-sort-row {
+            display: grid;
+            grid-template-columns: 1fr 220px;
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .field-control {
+            width: 100%;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.65rem 0.8rem;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+
+        .field-control:focus {
+            outline: none;
+            border-color: var(--accent-purple);
+            box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.18);
+        }
+
         .grid { display: grid; gap: 1.5rem; }
-        .grid-cols-4 { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+        .grid-cols-4 { grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); }
         .grid-cols-3 { grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); }
 
         .view-header { margin-bottom: 1.25rem; display: flex; justify-content: space-between; align-items: flex-end; gap: 1rem; flex-wrap: wrap; }
@@ -187,8 +270,9 @@
         }
 
         .card-content { padding: 1rem; flex-grow: 1; display: flex; flex-direction: column; }
-        .card-title { font-size: 1.05rem; margin-bottom: 0.5rem; line-height: 1.3; }
-        .card-meta { font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.9rem; display: flex; justify-content: space-between; }
+        .card-title { font-size: 1.12rem; margin-bottom: 0.5rem; line-height: 1.3; }
+        .card-meta { font-size: 0.87rem; color: var(--text-secondary); margin-bottom: 0.5rem; display: flex; justify-content: space-between; gap: 0.6rem; }
+        .card-meta.subtle { font-size: 0.77rem; margin-bottom: 0.9rem; }
         .tags-container { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: auto; }
         .tag { font-size: 0.7rem; padding: 0.2rem 0.6rem; border-radius: 12px; background-color: var(--bg-secondary); border: 1px solid var(--border-color); }
         .tag.purple { background-color: var(--accent-purple-light); color: var(--accent-purple); border-color: var(--accent-purple); }
@@ -360,7 +444,7 @@
         .stat-row:last-child { border-bottom: none; }
         .stat-label { color: var(--text-secondary); }
         .stat-value { font-weight: 600; }
-        .stars { color: var(--accent-purple); font-size: 1.2rem; }
+        .stars { color: var(--warning); font-size: 1.2rem; }
 
         .section-shell {
             background: var(--bg-primary);
@@ -409,6 +493,7 @@
             background: var(--black);
             color: var(--white);
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             font-size: 1.1rem;
@@ -418,9 +503,96 @@
             transition: transform 0.2s;
             text-align: center;
             padding: 1rem;
+            border: 2px solid transparent;
         }
 
         .import-tile:hover { transform: scale(1.03); background: var(--accent-purple); }
+        .import-tile.active { border-color: var(--accent-purple); }
+        .import-tile.connected { background: var(--success); color: #fff; }
+        .import-tile small { font-size: 0.72rem; font-weight: 500; opacity: 0.9; margin-top: 0.35rem; }
+
+        .inline-note {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+        }
+
+        .toast {
+            position: fixed;
+            right: 1rem;
+            bottom: 1rem;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            box-shadow: 0 12px 24px -12px rgba(0, 0, 0, 0.45);
+            padding: 0.9rem;
+            min-width: 260px;
+            z-index: 200;
+            display: flex;
+            gap: 0.7rem;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .launch-shell {
+            max-width: 680px;
+            margin: 3rem auto;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1.6rem;
+        }
+
+        .launch-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.84rem;
+            color: var(--text-secondary);
+            margin: 0.5rem 0 0.7rem;
+        }
+
+        .shortcut-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.48);
+            z-index: 180;
+            display: grid;
+            place-items: center;
+            padding: 1rem;
+        }
+
+        .shortcut-card {
+            width: min(560px, 100%);
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.2rem;
+        }
+
+        .shortcut-grid {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 0.55rem 0.8rem;
+            margin-top: 0.8rem;
+            align-items: center;
+        }
+
+        .shortcut-grid kbd {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 0.2rem 0.5rem;
+            font-size: 0.78rem;
+            font-family: inherit;
+            text-align: center;
+        }
+
+        .review-item {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.85rem;
+            margin-bottom: 0.7rem;
+            background: var(--bg-primary);
+        }
 
         footer {
             margin-top: 2.5rem;
@@ -494,6 +666,8 @@
             .result-info { min-width: 0; }
             .result-card .btn { width: 100%; }
             .import-grid { grid-template-columns: 1fr 1fr; }
+            .search-sort-row { grid-template-columns: 1fr; }
+            .nav-control { padding: 0.32rem 0.5rem; }
         }
 
         @media (max-width: 420px) {
@@ -517,6 +691,8 @@
                 <a href="#" onclick="navTo('quickpick-1')">Quick Pick</a>
                 <a href="#" onclick="navTo('community')">Community</a>
                 <a href="#" onclick="navTo('import')">Import</a>
+                <button class="nav-control" id="theme-toggle" onclick="toggleTheme()">Dark Mode</button>
+                <button class="nav-control" onclick="toggleShortcutHelp(true)">Shortcuts</button>
                 <a href="#" onclick="navTo('profile')" class="profile-chip" aria-label="Open user profile">
                     <span class="profile-avatar">BZ</span>
                     <span class="profile-meta">
@@ -584,13 +760,23 @@
         <section id="view-library" class="view hidden">
             <div class="view-header">
                 <div>
-                    <h1>Your Backlog</h1>
-                    <p>Filter and discover what to play next.</p>
+                    <h1>Your Backlog (Game Queue)</h1>
+                    <p>Filter, search, and sort your saved games to quickly choose what to play next.</p>
                 </div>
                 <div style="display: flex; gap: 0.6rem;">
                     <button class="btn btn-outline btn-pill" onclick="toggleFilterPanel()">Filters</button>
                     <button class="btn btn-primary btn-pill" onclick="navTo('quickpick-1')">Quick Pick</button>
                 </div>
+            </div>
+
+            <div class="search-sort-row">
+                <input id="library-search" class="field-control" placeholder="Search by title, genre, or platform..." oninput="updateSearchTerm(this.value)" aria-label="Search your backlog">
+                <select id="library-sort" class="field-control" onchange="updateSortBy(this.value)" aria-label="Sort backlog games">
+                    <option value="recommended">Sort: Recommended</option>
+                    <option value="alphabetical">Sort: A to Z</option>
+                    <option value="recent-played">Sort: Recently Played</option>
+                    <option value="recent-added">Sort: Recently Added</option>
+                </select>
             </div>
 
             <div class="summary-strip">
@@ -616,7 +802,11 @@
                         <span>Game Length</span>
                         <span id="time-display">Any length</span>
                     </div>
-                    <input type="range" id="time-filter" min="1" max="220" value="220" oninput="updateTimeFilter()">
+                    <div class="range-stack">
+                        <input type="range" id="time-filter-min" min="1" max="220" value="1" oninput="updateTimeFilter('min')">
+                        <input type="range" id="time-filter-max" min="1" max="220" value="220" oninput="updateTimeFilter('max')">
+                    </div>
+                    <p class="inline-note">Tip: use both handles to select a time range.</p>
                 </div>
 
                 <div class="filter-group">
@@ -676,7 +866,8 @@
         <section id="view-quickpick-1" class="view hidden">
             <div class="wizard-container">
                 <h2 class="wizard-title">Quick Pick</h2>
-                <p style="margin-bottom: 2rem; color: var(--text-secondary);">Can't decide what to play? Let us help you choose in seconds.</p>
+                <p style="margin-bottom: 0.8rem; color: var(--text-secondary);">Can't decide what to play? Let us help you choose in seconds.</p>
+                <p class="inline-note" style="margin-bottom: 2rem;">Quick Pick scores your backlog using your available time, preferred mood, progress momentum, and solo/co-op preference.</p>
 
                 <h3 style="margin-bottom: 1rem;">How much time do you have?</h3>
                 <div class="wizard-options" id="qp-time-options">
@@ -742,40 +933,14 @@
                     <h1>Community</h1>
                     <p>Share progress, discover squads, and track weekly challenges.</p>
                 </div>
-                <button class="btn btn-primary" onclick="alert('Posting is coming soon in this prototype!')">Create Post</button>
+                <button class="btn btn-primary" onclick="navTo('community-new-post')">Create Post</button>
             </div>
 
             <div class="community-grid">
                 <div>
                     <div class="section-shell">
                         <h3>Hot Discussions</h3>
-                        <div class="post">
-                            <h4>Best short game to finish this weekend?</h4>
-                            <div class="post-meta">by Rhea • 37 replies • 2h ago</div>
-                            <p style="font-size: 0.9rem;">Looking for a 6-10 hour game with a strong story. My vote is still on Resident Evil 4.</p>
-                            <div style="margin-top: 0.5rem;">
-                                <span class="pill">Story-Driven</span>
-                                <span class="pill">Short Sessions</span>
-                            </div>
-                        </div>
-                        <div class="post">
-                            <h4>Helldivers squad up thread</h4>
-                            <div class="post-meta">by BoltUnit • 14 replies • 4h ago</div>
-                            <p style="font-size: 0.9rem;">Drop your timezone and platform, I am organizing squads for tonight's operation.</p>
-                            <div style="margin-top: 0.5rem;">
-                                <span class="pill">Multiplayer</span>
-                                <span class="pill">LFG</span>
-                            </div>
-                        </div>
-                        <div class="post">
-                            <h4>Is 2026 finally my Elden Ring year?</h4>
-                            <div class="post-meta">by PixelNomad • 29 replies • 6h ago</div>
-                            <p style="font-size: 0.9rem;">Backlog guilt is real. Need a route recommendation for a first build.</p>
-                            <div style="margin-top: 0.5rem;">
-                                <span class="pill">RPG</span>
-                                <span class="pill">Backlog</span>
-                            </div>
-                        </div>
+                        <div id="community-post-list"></div>
                     </div>
                 </div>
 
@@ -859,6 +1024,21 @@
                         </div>
                     </div>
                     <div class="section-shell">
+                        <h3>Achievements</h3>
+                        <p class="inline-note" style="margin-bottom: 0.8rem;">6 of 10 achievements unlocked</p>
+                        <div class="progress-bar-bg" style="height: 10px;">
+                            <div class="progress-bar-fill" style="width: 60%; background: var(--success);"></div>
+                        </div>
+                        <div class="stat-row" style="margin-top: 0.7rem;">
+                            <span class="stat-label">Weekly Finisher</span>
+                            <span class="stat-value">Unlocked</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Challenge Streak (x4)</span>
+                            <span class="stat-value">In progress</span>
+                        </div>
+                    </div>
+                    <div class="section-shell">
                         <h3>Favorite Genres</h3>
                         <span class="pill">RPG</span>
                         <span class="pill">Story-Driven</span>
@@ -871,20 +1051,138 @@
 
         <section id="view-game-detail" class="view hidden"></section>
 
+        <section id="view-reviews" class="view hidden"></section>
+
+        <section id="view-write-review" class="view hidden">
+            <div class="section-shell" style="max-width: 760px; margin: 0 auto;">
+                <div class="view-header" style="margin-bottom: 0.5rem;">
+                    <div>
+                        <h1>Write A Review</h1>
+                        <p id="write-review-subtitle">Share what stood out to help others pick confidently.</p>
+                    </div>
+                </div>
+
+                <form onsubmit="submitReview(event)">
+                    <div class="filter-group">
+                        <div class="filter-title">Rating</div>
+                        <select id="review-rating" class="field-control" required>
+                            <option value="">Choose a rating</option>
+                            <option value="5">5 - Masterpiece</option>
+                            <option value="4">4 - Strong recommendation</option>
+                            <option value="3">3 - Solid but mixed</option>
+                            <option value="2">2 - Needs improvement</option>
+                            <option value="1">1 - Not recommended</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <div class="filter-title">Review Title</div>
+                        <input id="review-title" class="field-control" required placeholder="Example: Great pacing, weak final chapter">
+                    </div>
+                    <div class="filter-group">
+                        <div class="filter-title">Your Thoughts</div>
+                        <textarea id="review-body" class="field-control" required rows="5" placeholder="What did you enjoy, who is this game best for, and any downsides players should expect?"></textarea>
+                    </div>
+                    <div style="display: flex; gap: 0.8rem; justify-content: flex-end;">
+                        <button class="btn btn-outline" type="button" onclick="backFromWriteReview()">Cancel</button>
+                        <button class="btn btn-primary" type="submit">Publish Review</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <section id="view-community-new-post" class="view hidden">
+            <div class="section-shell" style="max-width: 760px; margin: 0 auto;">
+                <div class="view-header" style="margin-bottom: 0.6rem;">
+                    <div>
+                        <h1>Create Community Post</h1>
+                        <p>Ask a question, share progress, or organize a squad.</p>
+                    </div>
+                </div>
+
+                <form onsubmit="createCommunityPost(event)">
+                    <div class="filter-group">
+                        <div class="filter-title">Title</div>
+                        <input id="post-title" class="field-control" required placeholder="Example: Looking for 2 co-op players tonight">
+                    </div>
+                    <div class="filter-group">
+                        <div class="filter-title">Details</div>
+                        <textarea id="post-body" class="field-control" rows="5" required placeholder="Add context like platform, timezone, and what kind of replies you're hoping for."></textarea>
+                    </div>
+                    <div class="filter-group">
+                        <div class="filter-title">Tags</div>
+                        <input id="post-tags" class="field-control" placeholder="Comma separated tags, e.g. RPG, LFG, Story-Driven">
+                    </div>
+                    <div style="display: flex; gap: 0.8rem; justify-content: flex-end;">
+                        <button class="btn btn-outline" type="button" onclick="navTo('community')">Cancel</button>
+                        <button class="btn btn-primary" type="submit">Publish Post</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <section id="view-launch" class="view hidden">
+            <div class="launch-shell">
+                <div class="view-header" style="margin-bottom: 0.8rem;">
+                    <div>
+                        <h1 id="launch-title">Preparing game...</h1>
+                        <p id="launch-status">Initializing services and syncing save data.</p>
+                    </div>
+                </div>
+                <div class="progress-bar-bg" style="height: 12px;">
+                    <div id="launch-progress" class="progress-bar-fill" style="width: 0%;"></div>
+                </div>
+                <div class="launch-meta">
+                    <span id="launch-progress-label">0% complete</span>
+                    <span id="launch-eta">ETA: --</span>
+                </div>
+                <div style="display: flex; gap: 0.8rem; justify-content: flex-end; margin-top: 1rem;">
+                    <button class="btn btn-outline" onclick="cancelLaunch()">Cancel</button>
+                    <button class="btn btn-primary" id="launch-continue-btn" style="display: none;" onclick="finishLaunch()">Back To Game</button>
+                </div>
+            </div>
+        </section>
+
         <section id="view-import" class="view hidden">
             <div style="text-align: center; max-width: 860px; margin: 0 auto;">
                 <h1>Choose Your Platform</h1>
                 <p style="color: var(--text-secondary);">Start importing your library and keep progress synchronized in one place.</p>
 
                 <div class="import-grid">
-                    <div class="import-tile">Steam</div>
-                    <div class="import-tile">Epic</div>
-                    <div class="import-tile">PlayStation</div>
-                    <div class="import-tile">Xbox</div>
-                    <div class="import-tile">Switch</div>
-                    <div class="import-tile">Battle.net</div>
-                    <div class="import-tile">GOG</div>
-                    <div class="import-tile">Manual CSV</div>
+                    <button class="import-tile" id="import-tile-Steam" onclick="selectImportPlatform('Steam')">Steam<small>PC Launcher</small></button>
+                    <button class="import-tile" id="import-tile-Epic" onclick="selectImportPlatform('Epic')">Epic<small>PC Launcher</small></button>
+                    <button class="import-tile" id="import-tile-PlayStation" onclick="selectImportPlatform('PlayStation')">PlayStation<small>Console App</small></button>
+                    <button class="import-tile" id="import-tile-Xbox" onclick="selectImportPlatform('Xbox')">Xbox<small>Console App</small></button>
+                    <button class="import-tile" id="import-tile-Switch" onclick="selectImportPlatform('Switch')">Switch<small>Console Account</small></button>
+                    <button class="import-tile" id="import-tile-Battle.net" onclick="selectImportPlatform('Battle.net')">Battle.net<small>PC Launcher</small></button>
+                    <button class="import-tile" id="import-tile-GOG" onclick="selectImportPlatform('GOG')">GOG<small>PC Launcher</small></button>
+                    <button class="import-tile" id="import-tile-ManualCSV" onclick="selectImportPlatform('Manual CSV')">Manual CSV<small>File Upload</small></button>
+                </div>
+
+                <div class="section-shell" style="margin-top: 1.2rem; text-align: left;">
+                    <h3 id="import-selection-title">Select a platform to begin import</h3>
+                    <p id="import-selection-note" class="inline-note" style="margin-bottom: 1rem;">Connected platforms are marked and cannot be re-imported by mistake.</p>
+                    <div style="display: flex; gap: 0.7rem; flex-wrap: wrap;">
+                        <button class="btn btn-primary" onclick="connectImportPlatform()">Connect & Import</button>
+                        <button class="btn btn-outline" onclick="undoLastImport()">Undo Last Import</button>
+                    </div>
+                </div>
+
+                <div class="section-shell" style="margin-top: 1rem; text-align: left;">
+                    <h3>Manual Add (Single Game)</h3>
+                    <p class="inline-note" style="margin-bottom: 0.8rem;">Prefer not to link an account? Add an individual game manually.</p>
+                    <form onsubmit="addManualGame(event)">
+                        <div class="search-sort-row" style="margin-bottom: 0.7rem;">
+                            <input id="manual-title" class="field-control" required placeholder="Game title">
+                            <input id="manual-platform" class="field-control" required placeholder="Platform (e.g. Steam, PS5)">
+                        </div>
+                        <div class="search-sort-row" style="margin-bottom: 0.7rem;">
+                            <input id="manual-genre" class="field-control" required placeholder="Primary genre (e.g. RPG)">
+                            <input id="manual-hours" class="field-control" type="number" min="1" max="500" required placeholder="Main story hours">
+                        </div>
+                        <div style="display: flex; justify-content: flex-end;">
+                            <button class="btn btn-outline" type="submit">Add Game To Backlog</button>
+                        </div>
+                    </form>
                 </div>
 
                 <button class="btn btn-outline" style="margin-top: 2rem;" onclick="navTo('library')">Back to Library</button>
@@ -892,6 +1190,34 @@
         </section>
 
     </main>
+
+    <div id="shortcut-modal" class="shortcut-modal hidden" onclick="toggleShortcutHelp(false)">
+        <div class="shortcut-card" onclick="event.stopPropagation()">
+            <div class="view-header" style="margin-bottom: 0;">
+                <div>
+                    <h2>Keyboard Shortcuts</h2>
+                    <p class="inline-note">Shortcuts are disabled while typing in form fields.</p>
+                </div>
+                <button class="btn btn-outline" onclick="toggleShortcutHelp(false)">Close</button>
+            </div>
+            <div class="shortcut-grid">
+                <kbd>H</kbd><span>Go to Home</span>
+                <kbd>B</kbd><span>Go to Backlog</span>
+                <kbd>D</kbd><span>Go to Discover</span>
+                <kbd>C</kbd><span>Go to Community</span>
+                <kbd>I</kbd><span>Go to Import</span>
+                <kbd>Q</kbd><span>Start Quick Pick</span>
+                <kbd>/</kbd><span>Focus backlog search</span>
+                <kbd>?</kbd><span>Open shortcut help</span>
+                <kbd>Esc</kbd><span>Close modal/filter or cancel launch</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast hidden">
+        <span id="toast-message"></span>
+        <button id="toast-action" class="btn btn-outline" style="padding: 0.45rem 0.7rem; display: none;"></button>
+    </div>
 
     <footer>
         BacklogZero Prototype • One place for backlog tracking, discovery, and community play.
@@ -1021,15 +1347,67 @@
             }
         ];
 
+        const gameMeta = {
+            1: { platform: "Steam", dateAdded: "2026-03-01", lastPlayedDaysAgo: 9 },
+            2: { platform: "Steam", dateAdded: "2026-03-10", lastPlayedDaysAgo: 2 },
+            3: { platform: "EA App", dateAdded: "2026-02-19", lastPlayedDaysAgo: 14 },
+            4: { platform: "Steam", dateAdded: "2026-03-21", lastPlayedDaysAgo: 13 },
+            5: { platform: "PlayStation", dateAdded: "2026-03-26", lastPlayedDaysAgo: 1 },
+            6: { platform: "Steam", dateAdded: "2026-01-30", lastPlayedDaysAgo: 3 },
+            7: { platform: "Steam", dateAdded: "2026-03-15", lastPlayedDaysAgo: 4 },
+            8: { platform: "GOG", dateAdded: "2026-02-27", lastPlayedDaysAgo: 6 },
+            9: { platform: "Steam", dateAdded: "2026-03-18", lastPlayedDaysAgo: 1 },
+            10: { platform: "Xbox", dateAdded: "2026-01-12", lastPlayedDaysAgo: 18 }
+        };
+
+        const reviewsByGame = {
+            1: [
+                { author: "Nora", rating: 5, title: "Huge world, worth the time", body: "Amazing exploration loop. Boss spikes are tough but fair with summons.", time: "2 days ago" },
+                { author: "Jules", rating: 4, title: "Great build variety", body: "Incredible flexibility, just be ready for occasional difficulty walls.", time: "1 week ago" }
+            ],
+            5: [
+                { author: "Tariq", rating: 5, title: "Best pacing in the series", body: "Campaign stays tense and focused with very little filler.", time: "4 days ago" }
+            ],
+            6: [
+                { author: "Mina", rating: 5, title: "Perfect chill co-op game", body: "Great with friends and easy to play in short bursts.", time: "5 days ago" }
+            ]
+        };
+
+        let communityPosts = [
+            {
+                title: "Best game to finish this weekend?",
+                body: "I have around 10 hours and want something with strong momentum. Any recommendations from this backlog?",
+                author: "Kai",
+                time: "2h ago",
+                tags: ["Recommendations", "Weekend"]
+            },
+            {
+                title: "Co-op squad for Helldivers tonight",
+                body: "Need two more players, 9pm UTC. Chill run, voice optional.",
+                author: "Sam",
+                time: "5h ago",
+                tags: ["LFG", "Co-op"]
+            },
+            {
+                title: "How Quick Pick chooses games",
+                body: "It prioritizes your selected mood, available session time, current progress, and multiplayer preference.",
+                author: "BacklogZero Team",
+                time: "1d ago",
+                tags: ["Help", "Quick Pick"]
+            }
+        ];
+
         let activeFilters = {
             genre: [],
             players: [],
+            minTime: 1,
             maxTime: 220
         };
 
         let draftFilters = {
             genre: [],
             players: [],
+            minTime: 1,
             maxTime: 220
         };
 
@@ -1039,15 +1417,37 @@
             type: null
         };
 
+        let searchTerm = "";
+        let sortBy = "recommended";
+        let currentView = "home";
+        let previousView = "home";
+        let currentDetailGameId = null;
+        let currentReviewGameId = null;
+        let writeReviewGameId = null;
+        let selectedImportPlatform = "";
+        let connectedPlatforms = new Set(["Steam"]);
+        let launchTimer = null;
+        let launchingGameId = null;
+        let lastRemovedGame = null;
+        let lastImportAction = null;
+        let toastTimer = null;
+        let toastActionHandler = null;
+
         function cloneFilters(filters) {
             return {
                 genre: [...filters.genre],
                 players: [...filters.players],
+                minTime: filters.minTime,
                 maxTime: filters.maxTime
             };
         }
 
         function navTo(viewId) {
+            if (!document.getElementById(`view-${viewId}`)) return;
+
+            previousView = currentView;
+            currentView = viewId;
+
             document.querySelectorAll(".view").forEach(v => v.classList.add("hidden"));
             document.getElementById(`view-${viewId}`).classList.remove("hidden");
             window.scrollTo(0, 0);
@@ -1055,6 +1455,93 @@
             if (viewId === "home") renderHome();
             if (viewId === "library") renderLibrary();
             if (viewId === "discover") renderDiscover();
+            if (viewId === "community") renderCommunityPosts();
+            if (viewId === "import") renderImportState();
+        }
+
+        function isTypingContext() {
+            const active = document.activeElement;
+            if (!active) return false;
+            return ["INPUT", "TEXTAREA", "SELECT"].includes(active.tagName) || active.isContentEditable;
+        }
+
+        function renderStars(rating) {
+            const full = "★".repeat(Math.max(0, Math.min(5, rating)));
+            const empty = "☆".repeat(Math.max(0, 5 - rating));
+            return `${full}${empty}`;
+        }
+
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            return date.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
+        }
+
+        function getGameById(gameId) {
+            return games.find(g => g.id === gameId);
+        }
+
+        function nextGameId() {
+            return games.reduce((max, game) => Math.max(max, game.id), 0) + 1;
+        }
+
+        function showToast(message, actionLabel, actionHandler) {
+            const toast = document.getElementById("toast");
+            const msg = document.getElementById("toast-message");
+            const actionBtn = document.getElementById("toast-action");
+
+            msg.innerText = message;
+            toast.classList.remove("hidden");
+
+            clearTimeout(toastTimer);
+
+            if (actionLabel && typeof actionHandler === "function") {
+                toastActionHandler = actionHandler;
+                actionBtn.innerText = actionLabel;
+                actionBtn.style.display = "inline-flex";
+                actionBtn.onclick = () => {
+                    toastActionHandler();
+                    hideToast();
+                };
+            } else {
+                toastActionHandler = null;
+                actionBtn.style.display = "none";
+                actionBtn.onclick = null;
+            }
+
+            toastTimer = setTimeout(() => {
+                hideToast();
+            }, 4200);
+        }
+
+        function hideToast() {
+            const toast = document.getElementById("toast");
+            const actionBtn = document.getElementById("toast-action");
+            toast.classList.add("hidden");
+            actionBtn.style.display = "none";
+            actionBtn.onclick = null;
+            toastActionHandler = null;
+        }
+
+        function toggleTheme() {
+            const body = document.body;
+            body.classList.toggle("dark-mode");
+            const dark = body.classList.contains("dark-mode");
+            localStorage.setItem("bz-theme", dark ? "dark" : "light");
+            document.getElementById("theme-toggle").innerText = dark ? "Light Mode" : "Dark Mode";
+        }
+
+        function applyStoredTheme() {
+            const saved = localStorage.getItem("bz-theme");
+            if (saved === "dark") {
+                document.body.classList.add("dark-mode");
+            }
+            const dark = document.body.classList.contains("dark-mode");
+            document.getElementById("theme-toggle").innerText = dark ? "Light Mode" : "Dark Mode";
+        }
+
+        function toggleShortcutHelp(open) {
+            const modal = document.getElementById("shortcut-modal");
+            modal.classList.toggle("hidden", !open);
         }
 
         function renderHome() {
@@ -1083,6 +1570,7 @@
         }
 
         function createCard(game) {
+            const meta = gameMeta[game.id] || { platform: "Unknown", dateAdded: "2026-01-01" };
             const card = document.createElement("div");
             card.className = "card";
             card.onclick = () => showGameDetail(game.id);
@@ -1093,8 +1581,12 @@
                 <div class="card-content">
                     <h3 class="card-title">${game.title}</h3>
                     <div class="card-meta">
-                        <span>${game.genre[0]}</span>
+                        <span>${meta.platform}</span>
                         <span>${game.timeToBeat} hrs</span>
+                    </div>
+                    <div class="card-meta subtle">
+                        <span>${game.genre[0]}</span>
+                        <span>Added ${formatDate(meta.dateAdded)}</span>
                     </div>
                     <div class="tags-container">
                         <span class="tag">${game.type}</span>
@@ -1116,12 +1608,19 @@
             document.getElementById("summary-avg").innerText = `${avg}h`;
         }
 
-        function renderLibrary() {
-            const grid = document.getElementById("library-grid");
-            grid.innerHTML = "";
+        function recommendedScore(game) {
+            const momentum = game.progress > 0 ? 10 : 0;
+            const shortBonus = game.timeToBeat <= 35 ? 8 : 0;
+            return (game.communityScore * 10) + momentum + shortBonus;
+        }
 
-            const filteredGames = games.filter(game => {
-                if (game.timeToBeat > activeFilters.maxTime) return false;
+        function getFilteredAndSortedGames() {
+            const term = searchTerm.trim().toLowerCase();
+
+            let result = games.filter(game => {
+                const meta = gameMeta[game.id] || { platform: "" };
+
+                if (game.timeToBeat < activeFilters.minTime || game.timeToBeat > activeFilters.maxTime) return false;
 
                 if (activeFilters.genre.length > 0) {
                     const hasGenre = activeFilters.genre.some(g => game.genre.includes(g));
@@ -1133,13 +1632,44 @@
                     if (!hasPlayerMatch) return false;
                 }
 
+                if (term) {
+                    const haystack = [game.title, game.genre.join(" "), meta.platform, game.type].join(" ").toLowerCase();
+                    if (!haystack.includes(term)) return false;
+                }
+
                 return true;
             });
 
+            if (sortBy === "alphabetical") {
+                result = result.sort((a, b) => a.title.localeCompare(b.title));
+            } else if (sortBy === "recent-played") {
+                result = result.sort((a, b) => {
+                    const aMeta = gameMeta[a.id] || { lastPlayedDaysAgo: 999 };
+                    const bMeta = gameMeta[b.id] || { lastPlayedDaysAgo: 999 };
+                    return aMeta.lastPlayedDaysAgo - bMeta.lastPlayedDaysAgo;
+                });
+            } else if (sortBy === "recent-added") {
+                result = result.sort((a, b) => {
+                    const aMeta = gameMeta[a.id] || { dateAdded: "1970-01-01" };
+                    const bMeta = gameMeta[b.id] || { dateAdded: "1970-01-01" };
+                    return new Date(bMeta.dateAdded) - new Date(aMeta.dateAdded);
+                });
+            } else {
+                result = result.sort((a, b) => recommendedScore(b) - recommendedScore(a));
+            }
+
+            return result;
+        }
+
+        function renderLibrary() {
+            const grid = document.getElementById("library-grid");
+            grid.innerHTML = "";
+
+            const filteredGames = getFilteredAndSortedGames();
             updateSummary(filteredGames);
 
             if (filteredGames.length === 0) {
-                grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 3rem; color: #6b7280;">No games match your current filters.</p>';
+                grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 3rem; color: var(--text-secondary);">No games match your current filters. Try resetting filters or broadening your search.</p>';
                 return;
             }
 
@@ -1160,13 +1690,30 @@
         }
 
         function toggleFilterPanel() {
-            document.getElementById("filter-panel").classList.toggle("hidden");
+            const panel = document.getElementById("filter-panel");
+            panel.classList.toggle("hidden");
         }
 
-        function updateTimeFilter() {
-            const val = parseInt(document.getElementById("time-filter").value, 10);
-            draftFilters.maxTime = val;
-            document.getElementById("time-display").innerText = val === 220 ? "Any length" : `Under ${val} Hours`;
+        function updateTimeFilter(bound) {
+            const minEl = document.getElementById("time-filter-min");
+            const maxEl = document.getElementById("time-filter-max");
+            let minVal = parseInt(minEl.value, 10);
+            let maxVal = parseInt(maxEl.value, 10);
+
+            if (bound === "min" && minVal > maxVal) {
+                maxVal = minVal;
+                maxEl.value = String(maxVal);
+            }
+            if (bound === "max" && maxVal < minVal) {
+                minVal = maxVal;
+                minEl.value = String(minVal);
+            }
+
+            draftFilters.minTime = minVal;
+            draftFilters.maxTime = maxVal;
+
+            const label = minVal === 1 && maxVal === 220 ? "Any length" : `${minVal} - ${maxVal} Hours`;
+            document.getElementById("time-display").innerText = label;
         }
 
         function toggleDraftFilter(btn) {
@@ -1189,8 +1736,12 @@
                 btn.classList.toggle("active", isActive);
             });
 
-            document.getElementById("time-filter").value = draftFilters.maxTime;
-            document.getElementById("time-display").innerText = draftFilters.maxTime === 220 ? "Any length" : `Under ${draftFilters.maxTime} Hours`;
+            document.getElementById("time-filter-min").value = draftFilters.minTime;
+            document.getElementById("time-filter-max").value = draftFilters.maxTime;
+            const label = draftFilters.minTime === 1 && draftFilters.maxTime === 220
+                ? "Any length"
+                : `${draftFilters.minTime} - ${draftFilters.maxTime} Hours`;
+            document.getElementById("time-display").innerText = label;
         }
 
         function applyFilters() {
@@ -1203,9 +1754,20 @@
             draftFilters = {
                 genre: [],
                 players: [],
+                minTime: 1,
                 maxTime: 220
             };
             syncFilterUIFromDraft();
+        }
+
+        function updateSearchTerm(value) {
+            searchTerm = value;
+            renderLibrary();
+        }
+
+        function updateSortBy(value) {
+            sortBy = value;
+            renderLibrary();
         }
 
         function selectQP(category, value, btnElem) {
@@ -1222,7 +1784,8 @@
         function generateQuickPicks() {
             navTo("quickpick-results");
 
-            document.getElementById("qp-subtitle").innerText = `Based on: ${qpState.time || "?"} hour window • ${qpState.mood || "Any"} mood • ${qpState.type || "Solo"} play`;
+            document.getElementById("qp-subtitle").innerText =
+                `Based on: ${qpState.time || "?"} hour window • ${qpState.mood || "Any"} mood • ${qpState.type || "Solo"} play`;
 
             let recommendations = games.filter(game => {
                 if (qpState.type === "Solo" && game.type !== "Solo") return false;
@@ -1258,15 +1821,25 @@
                             <p style="font-size: 0.75rem; text-align: right;">${game.progress}% Complete</p>
                         ` : ""}
                     </div>
-                    <button class="btn btn-primary" onclick="showGameDetail(${game.id})">View Details</button>
+                    <div style="display: flex; flex-direction: column; gap: 0.45rem;">
+                        <button class="btn btn-outline" onclick="showGameDetail(${game.id})">View Details</button>
+                        <button class="btn btn-primary" onclick="startLaunch(${game.id})">Play Now</button>
+                    </div>
                 `;
                 container.appendChild(el);
             });
         }
 
         function showGameDetail(gameId) {
-            const game = games.find(g => g.id === gameId);
+            const game = getGameById(gameId);
             if (!game) return;
+
+            currentDetailGameId = gameId;
+            const meta = gameMeta[game.id] || { platform: "Unknown", dateAdded: "2026-01-01", lastPlayedDaysAgo: 0 };
+            const reviews = reviewsByGame[game.id] || [];
+            const averageRating = reviews.length
+                ? (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length)
+                : game.communityScore;
 
             const detailView = document.getElementById("view-game-detail");
             detailView.innerHTML = `
@@ -1290,12 +1863,21 @@
                                 <div style="flex: 1; min-width: 220px;">
                                     <div class="stat-label">Time Played</div>
                                     <div class="stat-value" style="font-size: 1.5rem;">${Math.floor(game.timeToBeat * (game.progress / 100))} Hours</div>
+                                    <div class="inline-note">Last played ${meta.lastPlayedDaysAgo} day(s) ago</div>
                                 </div>
                             </div>
                         </div>
 
                         <div class="detail-section">
-                            <h2>Time To Beat</h2>
+                            <h2>Details</h2>
+                            <div class="stat-row">
+                                <span class="stat-label">Platform</span>
+                                <span class="stat-value">${meta.platform}</span>
+                            </div>
+                            <div class="stat-row">
+                                <span class="stat-label">Added</span>
+                                <span class="stat-value">${formatDate(meta.dateAdded)}</span>
+                            </div>
                             <div class="stat-row">
                                 <span class="stat-label">Main Story</span>
                                 <span class="stat-value">${game.timeToBeat} Hours</span>
@@ -1314,36 +1896,478 @@
                     <div>
                         <div class="detail-section">
                             <h2>Community Reviews</h2>
-                            <div class="stars">★★★★☆</div>
-                            <p style="margin-top: 0.5rem; font-size: 0.9rem;">${game.communityScore.toFixed(1)} community score</p>
+                            <div class="stars">${renderStars(Math.round(averageRating))}</div>
+                            <p style="margin-top: 0.5rem; font-size: 0.9rem;">${averageRating.toFixed(1)} average rating • ${reviews.length} review(s)</p>
 
                             <div style="margin-top: 1.2rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
-                                <div style="margin-bottom: 1rem;">
-                                    <div class="stars" style="font-size: 0.9rem;">★★★★★</div>
-                                    <p style="font-size: 0.85rem; font-weight: 500;">"Great pacing and atmosphere. Easy to jump back into."</p>
-                                </div>
-                                <div>
-                                    <div class="stars" style="font-size: 0.9rem;">★★★★☆</div>
-                                    <p style="font-size: 0.85rem; font-weight: 500;">"Loved it overall, but some sections run long."</p>
-                                </div>
+                                ${reviews.slice(0, 2).map(review => `
+                                    <div style="margin-bottom: 0.8rem;">
+                                        <div class="stars" style="font-size: 0.9rem;">${renderStars(review.rating)}</div>
+                                        <p style="font-size: 0.85rem; font-weight: 600;">${review.title}</p>
+                                        <p style="font-size: 0.8rem; color: var(--text-secondary);">${review.author} • ${review.time}</p>
+                                    </div>
+                                `).join("") || '<p class="inline-note">No reviews yet. Be the first to add one.</p>'}
                             </div>
-                            <button class="btn btn-outline" style="width: 100%; margin-top: 1.2rem;">View All Reviews</button>
+
+                            <button class="btn btn-outline" style="width: 100%; margin-top: 0.8rem;" onclick="showReviews(${game.id})">View All Reviews</button>
+                            <button class="btn btn-outline" style="width: 100%; margin-top: 0.6rem;" onclick="openWriteReview(${game.id})">Write A Review</button>
                         </div>
 
-                        <button class="btn btn-primary" style="width: 100%; padding: 1.1rem; font-size: 1rem; margin-top: 0.9rem;">Play Now</button>
+                        <button class="btn btn-primary" style="width: 100%; padding: 1.1rem; font-size: 1rem; margin-top: 0.9rem;" onclick="startLaunch(${game.id})">Play Now</button>
+                        <button class="btn btn-outline" style="width: 100%; margin-top: 0.6rem; border-color: var(--danger); color: var(--danger);" onclick="removeGameFromBacklog(${game.id})">Remove From Backlog</button>
                     </div>
                 </div>
 
-                <button class="btn btn-outline" style="margin-top: 1.5rem;" onclick="navTo('library')">Back to Library</button>
+                <div style="display: flex; gap: 0.8rem; margin-top: 1.5rem;">
+                    <button class="btn btn-outline" onclick="backFromDetail()">Back</button>
+                    <button class="btn btn-outline" onclick="navTo('home')">Exit To Home</button>
+                </div>
             `;
 
             navTo("game-detail");
         }
 
+        function backFromDetail() {
+            const fallback = previousView === "game-detail" ? "library" : previousView;
+            navTo(fallback || "library");
+        }
+
+        function showReviews(gameId) {
+            const game = getGameById(gameId);
+            if (!game) return;
+
+            currentReviewGameId = gameId;
+            const reviews = reviewsByGame[gameId] || [];
+            const view = document.getElementById("view-reviews");
+
+            view.innerHTML = `
+                <div class="view-header">
+                    <div>
+                        <h1>${game.title} Reviews</h1>
+                        <p>Browse all player feedback in one place.</p>
+                    </div>
+                    <div style="display: flex; gap: 0.6rem;">
+                        <button class="btn btn-outline" onclick="showGameDetail(${game.id})">Back To Game</button>
+                        <button class="btn btn-primary" onclick="openWriteReview(${game.id})">Write A Review</button>
+                    </div>
+                </div>
+
+                <div class="section-shell" style="max-width: 860px;">
+                    ${reviews.length ? reviews.map(review => `
+                        <div class="review-item">
+                            <div style="display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap;">
+                                <strong>${review.title}</strong>
+                                <span class="stars" style="font-size: 0.95rem;">${renderStars(review.rating)}</span>
+                            </div>
+                            <p style="margin: 0.4rem 0;">${review.body}</p>
+                            <p class="inline-note">${review.author} • ${review.time}</p>
+                        </div>
+                    `).join("") : '<p class="inline-note">No reviews have been posted for this game yet.</p>'}
+                </div>
+            `;
+
+            navTo("reviews");
+        }
+
+        function openWriteReview(gameId) {
+            const game = getGameById(gameId);
+            if (!game) return;
+
+            writeReviewGameId = gameId;
+            document.getElementById("write-review-subtitle").innerText = `Reviewing: ${game.title}`;
+            document.getElementById("review-rating").value = "";
+            document.getElementById("review-title").value = "";
+            document.getElementById("review-body").value = "";
+            navTo("write-review");
+        }
+
+        function backFromWriteReview() {
+            if (writeReviewGameId) {
+                showReviews(writeReviewGameId);
+                return;
+            }
+            navTo("community");
+        }
+
+        function submitReview(event) {
+            event.preventDefault();
+            if (!writeReviewGameId) return;
+
+            const rating = parseInt(document.getElementById("review-rating").value, 10);
+            const title = document.getElementById("review-title").value.trim();
+            const body = document.getElementById("review-body").value.trim();
+            if (!rating || !title || !body) return;
+
+            if (!reviewsByGame[writeReviewGameId]) reviewsByGame[writeReviewGameId] = [];
+
+            reviewsByGame[writeReviewGameId].unshift({
+                author: "User Zero",
+                rating,
+                title,
+                body,
+                time: "Just now"
+            });
+
+            const game = getGameById(writeReviewGameId);
+            showToast(`Review published for ${game ? game.title : "the game"}.`);
+            showReviews(writeReviewGameId);
+        }
+
+        function renderCommunityPosts() {
+            const list = document.getElementById("community-post-list");
+            list.innerHTML = "";
+
+            communityPosts.forEach(post => {
+                const el = document.createElement("div");
+                el.className = "post";
+                el.innerHTML = `
+                    <h4>${post.title}</h4>
+                    <div class="post-meta">${post.author} • ${post.time}</div>
+                    <p style="margin-bottom: 0.5rem;">${post.body}</p>
+                    <div>${post.tags.map(tag => `<span class="pill">${tag}</span>`).join("")}</div>
+                `;
+                list.appendChild(el);
+            });
+        }
+
+        function createCommunityPost(event) {
+            event.preventDefault();
+
+            const title = document.getElementById("post-title").value.trim();
+            const body = document.getElementById("post-body").value.trim();
+            const tagsRaw = document.getElementById("post-tags").value.trim();
+            if (!title || !body) return;
+
+            const tags = tagsRaw
+                ? tagsRaw.split(",").map(t => t.trim()).filter(Boolean).slice(0, 4)
+                : ["Community"];
+
+            communityPosts.unshift({
+                title,
+                body,
+                author: "User Zero",
+                time: "Just now",
+                tags
+            });
+
+            document.getElementById("post-title").value = "";
+            document.getElementById("post-body").value = "";
+            document.getElementById("post-tags").value = "";
+
+            renderCommunityPosts();
+            navTo("community");
+            showToast("Community post published.");
+        }
+
+        function updateLaunchUI(progress, statusText, etaText) {
+            document.getElementById("launch-progress").style.width = `${progress}%`;
+            document.getElementById("launch-progress-label").innerText = `${progress}% complete`;
+            document.getElementById("launch-status").innerText = statusText;
+            document.getElementById("launch-eta").innerText = `ETA: ${etaText}`;
+        }
+
+        function startLaunch(gameId) {
+            const game = getGameById(gameId);
+            if (!game) return;
+
+            launchingGameId = gameId;
+            document.getElementById("launch-title").innerText = `Launching ${game.title}`;
+            document.getElementById("launch-continue-btn").style.display = "none";
+            updateLaunchUI(0, "Initializing services and syncing save data.", "~10s");
+            navTo("launch");
+
+            clearInterval(launchTimer);
+            let progress = 0;
+
+            launchTimer = setInterval(() => {
+                progress = Math.min(100, progress + Math.floor(Math.random() * 18) + 9);
+                let status = "Loading game profile and validating content...";
+                if (progress >= 45) status = "Preparing session and restoring checkpoints...";
+                if (progress >= 80) status = "Finalizing launch...";
+                const remainingSeconds = Math.max(1, Math.ceil((100 - progress) / 12));
+                updateLaunchUI(progress, status, `~${remainingSeconds}s`);
+
+                if (progress >= 100) {
+                    clearInterval(launchTimer);
+                    launchTimer = null;
+                    updateLaunchUI(100, "Ready. Press Back To Game to continue.", "0s");
+                    document.getElementById("launch-continue-btn").style.display = "inline-flex";
+                }
+            }, 650);
+        }
+
+        function cancelLaunch() {
+            if (launchTimer) {
+                clearInterval(launchTimer);
+                launchTimer = null;
+            }
+            const gameId = launchingGameId;
+            launchingGameId = null;
+            if (gameId) {
+                showGameDetail(gameId);
+                showToast("Game launch canceled.");
+                return;
+            }
+            navTo("library");
+        }
+
+        function finishLaunch() {
+            const game = getGameById(launchingGameId);
+            if (game) {
+                showToast(`${game.title} launched successfully.`);
+                showGameDetail(game.id);
+                return;
+            }
+            navTo("library");
+        }
+
+        function removeGameFromBacklog(gameId) {
+            const index = games.findIndex(g => g.id === gameId);
+            if (index < 0) return;
+
+            const removed = games.splice(index, 1)[0];
+            const removedMeta = gameMeta[removed.id];
+            delete gameMeta[removed.id];
+
+            lastRemovedGame = { game: removed, index, meta: removedMeta };
+            showToast(`${removed.title} removed from backlog.`, "Undo", undoRemoveGame);
+
+            navTo("library");
+            renderHome();
+        }
+
+        function undoRemoveGame() {
+            if (!lastRemovedGame) return;
+            games.splice(lastRemovedGame.index, 0, lastRemovedGame.game);
+            if (lastRemovedGame.meta) gameMeta[lastRemovedGame.game.id] = lastRemovedGame.meta;
+            showToast(`${lastRemovedGame.game.title} restored to backlog.`);
+            lastRemovedGame = null;
+            renderLibrary();
+            renderHome();
+        }
+
+        function renderImportState() {
+            const tiles = document.querySelectorAll(".import-tile");
+            tiles.forEach(tile => {
+                const raw = tile.id.replace("import-tile-", "");
+                const platform = raw === "ManualCSV" ? "Manual CSV" : raw;
+                const isConnected = connectedPlatforms.has(platform);
+                tile.classList.toggle("connected", isConnected);
+                tile.classList.toggle("active", false);
+            });
+
+            if (selectedImportPlatform) {
+                const target = document.getElementById(`import-tile-${selectedImportPlatform.replace(/\s+/g, "")}`) ||
+                    document.getElementById(`import-tile-${selectedImportPlatform}`);
+                if (target) target.classList.add("active");
+            }
+
+            document.getElementById("import-selection-title").innerText =
+                selectedImportPlatform ? `${selectedImportPlatform} selected` : "Select a platform to begin import";
+
+            if (selectedImportPlatform && connectedPlatforms.has(selectedImportPlatform)) {
+                document.getElementById("import-selection-note").innerText =
+                    `${selectedImportPlatform} is already connected. Re-import is blocked to prevent accidental overwrite.`;
+            } else {
+                document.getElementById("import-selection-note").innerText =
+                    "Connected platforms are marked and cannot be re-imported by mistake.";
+            }
+        }
+
+        function selectImportPlatform(platform) {
+            selectedImportPlatform = platform;
+            renderImportState();
+        }
+
+        function createImportedGames(platform) {
+            const imported = [
+                {
+                    id: nextGameId(),
+                    title: `${platform} Import: Neon Horizon`,
+                    genre: ["Action-Packed", "Story-Driven"],
+                    timeToBeat: 18,
+                    players: "1",
+                    type: "Solo",
+                    progress: 0,
+                    communityScore: 4.2,
+                    reason: "Imported from your connected account.",
+                    image: "https://images.unsplash.com/photo-1618336753974-aae8e04506aa?auto=format&fit=crop&w=1200&q=80"
+                },
+                {
+                    id: nextGameId() + 1,
+                    title: `${platform} Import: Drift Protocol`,
+                    genre: ["Shooter", "Competitive"],
+                    timeToBeat: 26,
+                    players: "4+",
+                    type: "Multiplayer",
+                    progress: 0,
+                    communityScore: 4.1,
+                    reason: "Imported from your connected account.",
+                    image: "https://images.unsplash.com/photo-1552820728-8b83bb6b773f?auto=format&fit=crop&w=1200&q=80"
+                }
+            ];
+
+            imported.forEach((game, idx) => {
+                games.push(game);
+                gameMeta[game.id] = {
+                    platform,
+                    dateAdded: "2026-04-08",
+                    lastPlayedDaysAgo: 999 + idx
+                };
+            });
+
+            return imported.map(g => g.id);
+        }
+
+        function connectImportPlatform() {
+            if (!selectedImportPlatform) {
+                showToast("Choose a platform before importing.");
+                return;
+            }
+
+            if (connectedPlatforms.has(selectedImportPlatform)) {
+                showToast(`${selectedImportPlatform} is already connected.`);
+                return;
+            }
+
+            connectedPlatforms.add(selectedImportPlatform);
+            const importedIds = createImportedGames(selectedImportPlatform);
+            lastImportAction = {
+                type: "platform",
+                platform: selectedImportPlatform,
+                importedIds
+            };
+
+            renderImportState();
+            renderLibrary();
+            renderHome();
+            showToast(`Imported ${importedIds.length} games from ${selectedImportPlatform}.`, "Undo", undoLastImport);
+        }
+
+        function undoLastImport() {
+            if (!lastImportAction) {
+                showToast("No recent import to undo.");
+                return;
+            }
+
+            const ids = lastImportAction.importedIds || [];
+            ids.forEach(id => {
+                const idx = games.findIndex(g => g.id === id);
+                if (idx >= 0) games.splice(idx, 1);
+                delete gameMeta[id];
+            });
+
+            if (lastImportAction.type === "platform" && lastImportAction.platform) {
+                connectedPlatforms.delete(lastImportAction.platform);
+            }
+
+            const undoType = lastImportAction.type === "manual" ? "Manual add" : `${lastImportAction.platform} import`;
+            lastImportAction = null;
+
+            renderImportState();
+            renderLibrary();
+            renderHome();
+            showToast(`${undoType} undone.`);
+        }
+
+        function addManualGame(event) {
+            event.preventDefault();
+
+            const title = document.getElementById("manual-title").value.trim();
+            const platform = document.getElementById("manual-platform").value.trim();
+            const genre = document.getElementById("manual-genre").value.trim();
+            const hours = parseInt(document.getElementById("manual-hours").value, 10);
+            if (!title || !platform || !genre || !hours) return;
+
+            const id = nextGameId();
+            const game = {
+                id,
+                title,
+                genre: [genre, "Story-Driven"],
+                timeToBeat: hours,
+                players: "1",
+                type: "Solo",
+                progress: 0,
+                communityScore: 3.8,
+                reason: "Manually added to backlog.",
+                image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1200&q=80"
+            };
+
+            games.push(game);
+            gameMeta[id] = {
+                platform,
+                dateAdded: "2026-04-08",
+                lastPlayedDaysAgo: 999
+            };
+
+            lastImportAction = {
+                type: "manual",
+                importedIds: [id]
+            };
+
+            document.getElementById("manual-title").value = "";
+            document.getElementById("manual-platform").value = "";
+            document.getElementById("manual-genre").value = "";
+            document.getElementById("manual-hours").value = "";
+
+            renderLibrary();
+            renderHome();
+            showToast(`${title} added to backlog.`, "Undo", undoLastImport);
+        }
+
+        document.addEventListener("keydown", (event) => {
+            if (event.key === "Escape") {
+                const modalOpen = !document.getElementById("shortcut-modal").classList.contains("hidden");
+                if (modalOpen) {
+                    toggleShortcutHelp(false);
+                    return;
+                }
+
+                const filterOpen = !document.getElementById("filter-panel").classList.contains("hidden");
+                if (currentView === "library" && filterOpen) {
+                    document.getElementById("filter-panel").classList.add("hidden");
+                    return;
+                }
+
+                if (currentView === "launch") {
+                    cancelLaunch();
+                    return;
+                }
+            }
+
+            if (isTypingContext()) {
+                if (event.key !== "Escape") return;
+            }
+
+            const key = event.key.toLowerCase();
+            if (key === "h") navTo("home");
+            if (key === "b") navTo("library");
+            if (key === "d") navTo("discover");
+            if (key === "c") navTo("community");
+            if (key === "i") navTo("import");
+            if (key === "q") navTo("quickpick-1");
+
+            if (event.key === "/") {
+                event.preventDefault();
+                navTo("library");
+                const search = document.getElementById("library-search");
+                search.focus();
+                search.select();
+            }
+
+            if (event.key === "?") {
+                event.preventDefault();
+                toggleShortcutHelp(true);
+            }
+        });
+
+        applyStoredTheme();
         syncFilterUIFromDraft();
+        renderCommunityPosts();
         renderHome();
         renderLibrary();
         renderDiscover();
+        renderImportState();
         navTo("home");
     </script>
 </body>
